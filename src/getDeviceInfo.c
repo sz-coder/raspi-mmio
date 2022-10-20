@@ -16,9 +16,11 @@ bool MMIO_getDeviceInfo(raspi_information *info) {
 	uint32_t tmp = 0;
 	unsigned rev = 0;
 
-	if (fread(&tmp, 1, sizeof(tmp), fp) != sizeof(tmp)) {
-		fclose(fp); // don't leak memory
+	int bytes_read = fread(&tmp, 1, sizeof(tmp), fp);
 
+	fclose(fp);
+
+	if (bytes_read != sizeof(tmp)) {
 		return false;
 	}
 
@@ -57,13 +59,16 @@ bool MMIO_getDeviceInfo(raspi_information *info) {
 		break;
 	}
 
-	if (info->model_no) {
-		MMIO_intDebug("Detected Raspberry Pi Version %u", info->model_no);
-		MMIO_intDebug("Detected CPU %s", info->cpu);
-		MMIO_intDebug("phy_base_addr is %8.8x", info->phy_base_addr);
+	if (!info->model_no) {
+		MMIO_intError("Unable to detect Raspberry Pi Model no.");
+
+		return false;
 	}
 
-	fclose(fp); // don't leak memory
+
+	MMIO_intDebug("Detected Raspberry Pi Version %u", info->model_no);
+	MMIO_intDebug("Detected CPU %s", info->cpu);
+	MMIO_intDebug("phy_base_addr is %8.8x", info->phy_base_addr);
 
 	return true;
 }
