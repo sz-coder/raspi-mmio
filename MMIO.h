@@ -35,9 +35,6 @@
 		const char *cpu;
 	} raspi_information;
 
-	#define RASPI_3_PHY_BASE_ADDR  0x20000000u
-	#define RASPI_4_PHY_BASE_ADDR  0xFE000000u
-
 	bool MMIO_getDeviceInfo(raspi_information *info);
 
 	const raspi_gpio_registers *MMIO_open(
