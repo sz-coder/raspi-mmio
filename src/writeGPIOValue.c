@@ -42,5 +42,5 @@ void MMIO_writeGPIOValue(unsigned gpio, bool value) {
 		gpio, reg_no, rel_gpio_no, bit_mask
 	);
 
-	*GPREG |= bit_mask;
+	*GPREG = bit_mask;
 }
